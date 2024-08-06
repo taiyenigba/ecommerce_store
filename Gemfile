@@ -25,6 +25,7 @@ gem "selenium-webdriver"
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.1"
 gem "stripe", "~> 12.3"
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
@@ -39,5 +40,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
