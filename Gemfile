@@ -87,5 +87,3 @@ gem "tailwind_devise", "~> 0.0.1"
 gem "stripe", "~> 12.3"
 
 gem 'ffi', '~> 1.15'
-# Specify the Bundler version
-gem "bundler", ">= 2.5.11"
