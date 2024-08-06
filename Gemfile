@@ -17,11 +17,6 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 gem "bootsnap", require: false
 gem "image_processing", "~> 1.2"
-gem "debug", platforms: %i[mri mingw x64_mingw]
-gem "web-console"
-gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
-gem "capybara"
-gem "selenium-webdriver"
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.1"
 gem "stripe", "~> 12.3"
