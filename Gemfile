@@ -86,8 +86,6 @@ gem "tailwind_devise", "~> 0.0.1"
 
 gem "stripe", "~> 12.3"
 
-# Add ffi gem with specific version compatible with Heroku
-gem "ffi", "1.17.0"
-
+gem 'ffi', '~> 1.15'
 # Specify the Bundler version
 gem "bundler", ">= 2.5.11"

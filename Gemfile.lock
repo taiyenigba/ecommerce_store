@@ -317,7 +317,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   error_highlight (>= 0.4.0)
-  ffi (= 1.17.0)
+  ffi (~> 1.15)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
