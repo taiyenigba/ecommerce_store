@@ -85,3 +85,6 @@ gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.1"
 
 gem "stripe", "~> 12.3"
+
+# Add ffi gem with specific version compatible with Heroku
+gem "ffi", "1.17.0"
