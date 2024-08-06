@@ -1,0 +1,44 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <%= form_with url: products_path, method: :get, local: true, class: "mb-4" do %>
+    <div class="flex items-center gap-4">
+      <div>
+        <%= label_tag :keyword, "Search:" %>
+        <%= text_field_tag :keyword, params[:keyword], class: "ml-2 border p-2 rounded" %>
+      </div>
+      
+      <div>
+        <%= label_tag :category_id, "Category:" %>
+        <%= select_tag :category_id, options_from_collection_for_select(Category.all, :id, :name, params[:category_id]), include_blank: "All Categories", class: "ml-2 border p-2 rounded" %>
+      </div>
+
+      <div>
+        <%= label_tag :filter, "Filter:" %>
+        <%= select_tag :filter, options_for_select([["On Sale", "on_sale"], ["New", "new"], ["Recently Updated", "recently_updated"]], params[:filter]), include_blank: "No Filter", class: "ml-2 border p-2 rounded" %>
+      </div>
+      
+      <div>
+        <%= submit_tag "Search", class: "ml-2 bg-blue-500 text-white py-2 px-4 rounded" %>
+      </div>
+    </div>
+  <% end %>
+
+  <h1 class="font-bold text-7xl text-center font-Hollywood text-indigo-600">The Best Products</h1>
+
+  <div id="products" class="min-w-full grid md:grid-cols-4 gap-8">
+    <% @products.each do |product| %>
+      <%= render product %>
+    <% end %>
+  </div>
+
+  <div class="pagination-links mt-4 w-full flex justify-center">
+    <%= paginate @products %>
+  </div>
+
+  <div class="mt-4 w-full">
+    <%= link_to "Shop by Category", categories_path, class: "rounded-lg h-64 w-full bg-gray-200 text-2xl font-semibold p-2" %>
+  </div>
+</div>

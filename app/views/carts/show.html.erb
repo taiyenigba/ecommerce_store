@@ -1,0 +1,92 @@
+<div class="w-full flex flex-col items-center">
+  <div class="flex justify-between w-full items-center">  
+    <div class="flex flex-col gap-4">
+      <h1 class="text-5xl"> Your cart </h1>
+      <% if flash[:notice] %>
+        <p class="notice"><%= flash[:notice] %></p>
+      <% end %>
+      <% if flash[:alert] %>
+        <p class="alert"><%= flash[:alert] %></p>
+      <% end %>
+      <% if @current_cart&.cart_items&.any? %>
+        <p class="text-lg"> You have <%= @current_cart.cart_items.count %> items in your cart </p>
+      <% else %>
+        <p class="text-lg"> You don't have any items in your cart yet. To checkout first add items </p>
+      <% end %>
+    </div>
+    <% if @current_cart&.cart_items&.any? %>
+      <%= button_to "Checkout Now", stripe_session_cart_path(@current_cart.secret_id), id: "checkout-button", class: "rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500", method: :post %>
+    <% else %>
+      <%= content_tag :div, "Checkout Now", class: "rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 brightness-75" %>
+    <% end %>
+  </div>
+
+  <br/>
+
+  <% if session[:last_added_product_id] %>
+    <% last_product = Product.find(session[:last_added_product_id]) %>
+    <p>Last added product: <%= last_product.name %></p>
+  <% end %>
+
+  <div id="products" class="min-w-full grid md:grid-cols-4 gap-8 mb-8">
+    <% if @current_cart&.products&.any? %>
+      <% @current_cart.products.each do |product| %>
+        <div>
+          <%= render "products/product", product: product %>
+          <br/>
+          <%= link_to "Remove from cart", cart_path(product_id: product.id), class: "p-2 rounded-lg bg-indigo-500 text-indigo-100", data: { turbo_method: "delete" } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <br/>
+
+  <% if !current_user %>
+    <%= link_to "Sign in to save your cart for later", new_user_session_path, class: "text-lg text-gray-100 border-b-2 border-gray-200" %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const stripePublicKey = document.querySelector('meta[name="stripe-pk"]').content;
+    if (!stripePublicKey) {
+      console.error("Stripe public key not found in meta tags.");
+      return;
+    }
+
+    const stripe = Stripe(stripePublicKey);
+
+    document.querySelector("#checkout-button").addEventListener("click", (event) => {
+      event.preventDefault();
+
+      fetch("<%= stripe_session_cart_path(@current_cart.secret_id) %>", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => {
+            throw new Error(error.error);
+          });
+        }
+        return response.json();
+      })
+      .then(session => {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(result => {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert(error.message);
+      });
+    });
+  });
+</script>

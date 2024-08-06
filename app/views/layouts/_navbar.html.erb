@@ -1,0 +1,24 @@
+<div class="h-16 w-full fixed top-0 bg-gray-900 z-50"> 
+  <div class="max-w-7xl h-full w-full mx-auto flex items-center justify-between px-8">
+    <%= link_to root_path, class: "flex items-end gap-1" do %>
+      <%= image_tag("shops.png", class: "w-10 object-cover") %>
+      <span class="text-2xl text-gray-100">Tech Hub</span>
+    <% end %>
+    
+    <div class="flex items-center gap-6">
+      <div>
+        <% if current_user %>
+          <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-indigo-100" %>
+          <%= link_to "Past Orders", orders_path, class: "text-indigo-100 ml-4" %>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, class: "bg-gray-500 text-gray-100 rounded-lg p-2" %>
+          <%= link_to "Sign up", new_user_registration_path, class: "text-gray-100 text-lg" %>
+        <% end %>
+      </div>
+
+      <%= link_to cart_path do %>
+        <%= image_tag("trolley.png", class: "w-10 object-cover") %>
+      <% end %>
+    </div>
+  </div>
+</div>

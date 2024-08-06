@@ -1,0 +1,16 @@
+<nav role="navigation" aria-label="Pagination Navigation" class="flex justify-center mt-6">
+  <ul class="flex pl-0 rounded list-none flex-wrap">
+    <% paginator.each_page do |page| %>
+      <% if page %>
+        <li class="border px-3 py-2 m-1 rounded hover:bg-indigo-500 hover:text-white">
+          <%= link_to page, url_for(params.to_unsafe_h.merge(page: page)) %>
+        </li>
+      <% else %>
+        <li class="px-3 py-2 m-1">...</li>
+      <% end %>
+    <% end %>
+  </ul>
+</nav>
+
+
+

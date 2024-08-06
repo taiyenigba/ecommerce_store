@@ -1,0 +1,23 @@
+<h1>Your Orders</h1>
+
+<% if @orders.any? %>
+  <ul>
+    <% @orders.each do |order| %>
+      <li>
+        <strong>Order ID:</strong> <%= order.id %><br>
+        <strong>Total:</strong> <%= number_to_currency(order.total) %><br>
+        <strong>Status:</strong> <%= order.status %><br>
+        <strong>Items:</strong>
+        <ul>
+          <% order.cart.cart_items.each do |item| %>
+            <li><%= item.product.name %> - <%= item.quantity %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no orders.</p>
+<% end %>
+
+

@@ -1,0 +1,12 @@
+<div id="add-to-cart" class="w-full flex">
+  <% if @current_cart && @current_cart.products.where(id: @product.id).any? %>
+    <div class="rounded-lg font-semibold p-4 text-center text-xl bg-gray-400 hover:bg-gray-500 w-full">
+      Already in Cart
+    </div>
+  <% else %>
+    <%= form_with url: cart_path, method: :post do %>
+      <%= hidden_field_tag :product_id, @product.id %>
+      <%= submit_tag "Add To Cart", class: "rounded-lg font-semibold p-4 text-center text-xl bg-gray-400 hover:bg-gray-500 w-full" %>
+    <% end %>
+  <% end %>
+</div>

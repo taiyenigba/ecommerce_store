@@ -1,0 +1,64 @@
+<div class="w-full grid md:grid-cols-2">
+  <div class="w-full flex flex-col items-center md:pt-8">
+    <h1 class="text-5xl font-Hollywood text-indigo-900 text-center"> Your Cart </h1>
+    <% if @current_cart&.cart_items&.any? %>
+      <p> You have <%= @current_cart.cart_items.count %> products in your cart </p>
+      <div class="mx-auto flex flex-col gap-2"> 
+        <% @current_cart.products.each.with_index do |product, index| %>
+          <div class="flex gap-2 bg-gray-700/75 p-2">
+            <span class="px-2 rounded-full bg-gray-500 text-gray-100"> <%= index + 1 %> </span>
+            <p class="text-indigo-100"> <%= product.name %> </p>
+            <p class="text-green-500"> <%= number_to_currency product.price %> </p>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p> You don't have any items in your cart yet </p>
+    <% end %>
+  </div>
+
+  <% if @current_cart&.cart_items&.any? %>
+  
+      <div id="stripe-checkout"></div>
+      <button id="checkout-button" class="bg-blue-500 text-white p-4 rounded">Proceed to Payment</button>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const stripe = Stripe(document.querySelector('meta[name="stripe-pk"]').content);
+
+    document.querySelector("#checkout-button").addEventListener("click", (event) => {
+      event.preventDefault();
+
+      fetch("<%= stripe_session_cart_path(@current_cart.secret_id) %>", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => {
+            throw new Error(error.error);
+          });
+        }
+        return response.json();
+      })
+      .then(session => {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(result => {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert(error.message);
+      });
+    });
+  });
+</script>

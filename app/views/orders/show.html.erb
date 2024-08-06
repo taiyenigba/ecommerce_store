@@ -1,0 +1,28 @@
+<h1>Order Details</h1>
+
+<p><strong>Order ID:</strong> <%= @order.id %></p>
+<p><strong>Status:</strong> <%= @order.status %></p>
+<p><strong>Total:</strong> <%= number_to_currency(@order.total) %></p>
+<p><strong>Order Date:</strong> <%= @order.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+
+<h2>Products in this Order</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.cart.cart_items.each do |cart_item| %>
+      <tr>
+        <td><%= cart_item.product.name %></td>
+        <td><%= cart_item.quantity %></td>
+        <td><%= number_to_currency(cart_item.product.price) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back to Orders', orders_path %>
